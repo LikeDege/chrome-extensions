@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab Limiter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-row">
+        <h1>Tab Limiter</h1>
+        <div class="header-controls">
+          <span id="tab-count" class="badge">0</span>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="tabs">标签页</button>
+        <button class="tab-btn" data-tab="settings">设置</button>
+      </div>
+    </header>
+
+    <!-- Tabs Panel -->
+    <section id="panel-tabs" class="panel active">
+      <div class="actions-row">
+        <button id="btn-evict" class="btn btn-danger">立即清理</button>
+        <span id="status-text" class="status-text"></span>
+      </div>
+      <div id="tab-list" class="tab-list"></div>
+    </section>
+
+    <!-- Settings Panel -->
+    <section id="panel-settings" class="panel">
+      <div class="setting-group">
+        <label class="setting-label">
+          最大标签页数
+          <span class="setting-hint">超过此数量将自动关闭不活跃标签</span>
+        </label>
+        <div class="setting-control">
+          <input type="range" id="max-tabs" min="5" max="100" step="1">
+          <span id="max-tabs-value" class="range-value">20</span>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">
+          淘汰策略
+          <span class="setting-hint">选择标签页淘汰方式</span>
+        </label>
+        <div class="setting-control">
+          <select id="strategy">
+            <option value="lru">最久未访问 (LRU)</option>
+            <option value="lfu">最少访问 (LFU)</option>
+            <option value="combined">综合评分</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">
+          新标签保护期（分钟）
+          <span class="setting-hint">新打开的标签在此时间内不会被关闭</span>
+        </label>
+        <div class="setting-control">
+          <input type="range" id="grace-period" min="0" max="60" step="1">
+          <span id="grace-period-value" class="range-value">5</span>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">
+          检查间隔（分钟）
+          <span class="setting-hint">定期检查并清理多余标签</span>
+        </label>
+        <div class="setting-control">
+          <input type="range" id="check-interval" min="1" max="30" step="1">
+          <span id="check-interval-value" class="range-value">1</span>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label toggle-row">
+          <span>
+            保护固定标签页
+            <span class="setting-hint">固定的标签页不会被自动关闭</span>
+          </span>
+          <label class="toggle">
+            <input type="checkbox" id="pinned-protected">
+            <span class="toggle-slider"></span>
+          </label>
+        </label>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label toggle-row">
+          <span>
+            保护播放音频的标签页
+            <span class="setting-hint">正在播放声音的标签页不会被关闭</span>
+          </span>
+          <label class="toggle">
+            <input type="checkbox" id="audible-protected">
+            <span class="toggle-slider"></span>
+          </label>
+        </label>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">
+          保护域名
+          <span class="setting-hint">这些域名的标签页不会被关闭，每行一个</span>
+        </label>
+        <textarea id="protected-domains" rows="3" placeholder="example.com&#10;github.com"></textarea>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
